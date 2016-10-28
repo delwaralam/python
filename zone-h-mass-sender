@@ -1,0 +1,55 @@
+import requests,bs4,os
+import sys
+
+def clear():
+    if os.name == "nt":
+        os.system('cls')
+    else:
+        os.system('clear')
+clear()
+
+logo = """
+Mass Zone-h Poster 
+ ____        _ _  __        ___ _    _ 
+/ ___|  __ _| (_) \ \      / (_) | _(_)
+\___ \ / _` | | |  \ \ /\ / /| | |/ / |
+ ___) | (_| | | |   \ V  V / | |   <| |
+|____/ \__, |_|_|    \_/\_/  |_|_|\_\_|
+          |_|    
+                                                                          
+\t\t\x1b[6;30;42m Coded By BD_Inj3ct0r \x1b[0m
+
+"""
+
+print logo
+
+notifire = raw_input("Input notifire name : ")
+file = open("output.txt")
+#input('Enter the filename : ')
+#notifire = "BD Inj3ct0r" Enter Your Notifire Name 
+#file = Enter your site list file location
+total_error = 0
+total_success = 0
+url = 'http://zone-h.org/notify/single'
+for site in file:
+    if not site.startswith('http'):
+        site = 'http://'+site
+    site = site.strip()
+    total_success+=1
+    payload = {
+        'defacer':notifire,
+        'domain1' : site,
+        'hackmode': '3',
+        'reason': '3'
+        }
+    session = requests.session()
+    r = requests.post(url,data = payload)
+    soup = bs4.BeautifulSoup(r.text,'html.parser')
+    for inp in soup.findAll('input'):
+        if notifire in inp['value']:
+            print('Not succesed')
+            total_error+=1
+            total_success-=1
+            break
+
+print('Error {0}\nSuccess {1}' .format(total_error,total_success))
