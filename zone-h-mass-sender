@@ -24,7 +24,7 @@ Mass Zone-h Poster
 print logo
 
 notifire = raw_input("Input notifire name : ")
-file = open("output.txt")
+file = open("mass.txt")
 #input('Enter the filename : ')
 #notifire = "BD Inj3ct0r" Enter Your Notifire Name 
 #file = Enter your site list file location
