@@ -1,0 +1,99 @@
+#!/usr/bin/python
+
+import socket
+import urllib2
+import os, re
+import sys
+import cookielib
+import webbrowser
+
+
+def cls():
+
+	if os.name == "nt":
+		os.system('cls' and 'color a')
+	else:
+		os.system('clear')
+
+cls()
+
+banner = """
+
+Bing Reversel IP 
+ ____        _ _  __        ___ _    _ 
+/ ___|  __ _| (_) \ \      / (_) | _(_)
+\___ \ / _` | | |  \ \ /\ / /| | |/ / |
+ ___) | (_| | | |   \ V  V / | |   <| |
+|____/ \__, |_|_|    \_/\_/  |_|_|\_\_|
+          |_|    
+                                                                          
+\t\t\x1b[6;30;42m Coded By BD_Inj3ct0r \x1b[0m
+
+"""
+
+print banner
+
+
+def main():
+	try:
+		host = raw_input('Enter Your HostName/IP-Address: ')
+		print ""
+		print "Please wait .... "
+		if host.startswith("http://"):
+			host = host.replace("http://","")
+		elif host.startswith("https://"):
+			host = host.replace("https://", "")
+		else:
+			pass
+
+		ip = socket.gethostbyname(host)
+
+		#ip = sys.argv[1]	
+		cj = cookielib.CookieJar()
+		opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
+		
+		next = 0
+		while(next<=500):
+
+			url = "http://www.bing.com/search?q=ip%3A"+ip+"&first="+str(next)+"&FORM=PORE"
+			#print url
+			data = urllib2.Request(url)
+			box = opener.open(data).read()
+			next = next+10
+			b = re.findall('<h2><a href="\S+', box)
+			for bing in b:
+				
+				x = bing.replace('<h2><a href="http://', "").replace('/"', "").replace('"', "")
+				if x.startswith("www."):
+					x = x.replace("www.", "")
+				else:
+					pass
+
+				with open("x.txt", 'a') as f:
+					f.write(x)
+					f.write("\n")
+
+		lines = open("x.txt", 'r').read().split("\n")
+		lines_set = set(lines)
+		count = 0
+		for line in lines_set:
+			with open("bingreip.txt", 'a') as neo:
+				count = count + 1
+				black = line.split("/")[0]
+				neo.write(black)
+				neo.write("\n")
+
+		print "Total Sites Found: " + str(count)
+
+		os.unlink("x.txt")
+		webbrowser.open("bingreip.txt")
+				
+
+	except urllib2.HTTPError:
+		pass
+
+	except socket.gaierror:
+		print ""
+		print "Please Enter Valid Domain-Name or IP-Address"
+		print ""
+main()
